@@ -62,4 +62,4 @@ rm -rf $RPM_BUILD_ROOT
 %doc README TODO ChangeLog AUTHORS sample.wmmp3
 %attr(755,root,root) %{_bindir}/wmmp3
 
-#%{_applnkdir}/DockApplets/wmmp3.desktop
+#%%{_applnkdir}/DockApplets/wmmp3.desktop
