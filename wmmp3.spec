@@ -19,14 +19,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 
 %description
-wmmp3 is a frontend for the mpg123 mp3 player. It is an X11
+wmmp3 is a frontend for the mpg123 MP3 player. It is an X11
 application designed to work in the WindowMaker dock. All user options
 are contained in a config file, $CONFIG_DIR/wmmp3 . There is a
 sample.wmmp3 file in the package that can be used as an
 example/template.
 
 %description -l pl
-wmmp3 jest nak³adk± dla odtwarzacza mp3 - mpg123, zaprojektowan± do
+wmmp3 jest nak³adk± dla odtwarzacza MP3 - mpg123, zaprojektowan± do
 pracy w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte w
 pliku $CONFIG_DIR/wmmp3. W pakiecie znajduje siê plik sample.wmmp3,
 mog±cy pos³u¿yæ za przyk³ad lub szablon do stworzenia w³asnego pliku
