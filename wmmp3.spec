@@ -14,10 +14,9 @@ URL:		http://dotfiles.com/software/wmmp3/
 BuildRequires:	XFree86-devel
 BuildRequires:	xpm-devel
 Requires:	mpg123
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix 	/usr/X11R6
-%define		_applnkdir	%{_datadir}/applnk
 
 %description
 wmmp3 is a frontend for the mpg123 mp3 player. It is an X11 application
