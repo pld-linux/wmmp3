@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=wmmp3
+Name=WmMp3
 Comment=Frontend to mpg123 player
 Comment[pl]=Nakładka na odtwarzacz mpg123
 Exec=wmmp3
