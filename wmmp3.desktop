@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=wmmp3
+Comment=Frontend to mpg123 player
+Comment[pl]=Nak³adka na odtwarzacz mpg123
+Exec=wmmp3
+Terminal=0
+Type=Application
