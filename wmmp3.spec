@@ -2,7 +2,7 @@ Summary:	wmmp3 - mpg123 frontend for the WindowMaker Dock
 Summary(pl):	wmmp3 - nak³adka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
 Version:	0.11
-Release:	3
+Release:	4
 Group:		X11/Window Managers/Tools
 Group(de):	X11/Fenstermanager/Werkzeuge
 Group(pl):	X11/Zarz±dcy Okien/Narzêdzia
@@ -55,7 +55,7 @@ install -d $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
+#install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 
 gzip -9nf README TODO ChangeLog AUTHORS
 
@@ -64,7 +64,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc {README,TODO,ChangeLog,AUTHORS}.gz sample.wmmp3
+%doc *.gz sample.wmmp3
 %attr(755,root,root) %{_bindir}/wmmp3
 
-%{_applnkdir}/DockApplets/wmmp3.desktop
+#%{_applnkdir}/DockApplets/wmmp3.desktop
