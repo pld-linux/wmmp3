@@ -4,29 +4,33 @@ Name:		wmmp3
 Version:	0.11
 Release:	3
 Group:		X11/Window Managers/Tools
+Group(de):	X11/Fenstermanager/Werkzeuge
 Group(pl):	X11/Zarz±dcy Okien/Narzêdzia
 License:	GPL
 Source0:	http://dotfiles.com/software/wmmp3/%{name}-%{version}.tar.gz
-Source1:	wmmp3.desktop
-Patch0:		wmmp3-home_etc.patch
-Patch1:		wmmp3-mpg123_path.patch
+Source1:	%{name}.desktop
+Patch0:		%{name}-home_etc.patch
+Patch1:		%{name}-mpg123_path.patch
 URL:		http://dotfiles.com/software/wmmp3/
 BuildRequires:	XFree86-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
 Requires:	mpg123
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix 	/usr/X11R6
 
 %description
-wmmp3 is a frontend for the mpg123 mp3 player. It is an X11 application
-designed to work in the WindowMaker dock. All user options are contained
-in a config file, $CONFIG_DIR/wmmp3 . There is a sample.wmmp3 file
-in the package that can be used as an example/template.
+wmmp3 is a frontend for the mpg123 mp3 player. It is an X11
+application designed to work in the WindowMaker dock. All user options
+are contained in a config file, $CONFIG_DIR/wmmp3 . There is a
+sample.wmmp3 file in the package that can be used as an
+example/template.
 
 %description -l pl
-wmmp3 jest nak³adk± dla odtwarzacza mp3 - mpg123, zaprojektowan± do 
-pracy w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte
-w pliku $CONFIG_DIR/wmmp3. W pakiecie znajduje siê plik sample.wmmp3,
+wmmp3 jest nak³adk± dla odtwarzacza mp3 - mpg123, zaprojektowan± do
+pracy w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte w
+pliku $CONFIG_DIR/wmmp3. W pakiecie znajduje siê plik sample.wmmp3,
 mog±cy pos³u¿yæ za przyk³ad lub szablon do stworzenia w³asnego pliku
 konfiguracyjnego.
 
