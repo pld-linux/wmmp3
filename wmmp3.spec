@@ -3,10 +3,10 @@ Summary(pl):	wmmp3 - nak³adka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
 Version:	0.11
 Release:	4
+License:	GPL
 Group:		X11/Window Managers/Tools
 Group(de):	X11/Fenstermanager/Werkzeuge
 Group(pl):	X11/Zarz±dcy Okien/Narzêdzia
-License:	GPL
 Source0:	http://dotfiles.com/software/wmmp3/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Patch0:		%{name}-home_etc.patch
