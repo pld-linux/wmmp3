@@ -1,39 +1,5 @@
---- wmmp3-0.11/main.c.pius	Thu Dec  9 05:17:34 1999
-+++ wmmp3-0.11/main.c	Fri Dec 10 18:10:13 1999
-@@ -121,9 +121,17 @@
- 	pw = getpwuid(getuid());
- 	/* don't forget about the string terminator... */
- 	config_filename = (char *) malloc(sizeof(char) *
--					   (strlen(pw->pw_dir) + 8));
--	sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
-+					   (strlen(pw->pw_dir) + 11));
- 
-+	sprintf(config_filename, "%s/etc/wmmp3", pw->pw_dir);
-+	fp = fopen(config_filename, "r");
-+	if (fp == NULL) {
-+	    fprintf(stderr, "open of %s failed: %s\n",
-+                        config_filename, strerror(errno));
-+	    sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
-+           fprintf(stderr, "trying %s ...\n", config_filename);
-+	    fp = fopen(config_filename, "r");
-+	}
- 
- 	fp = fopen(config_filename, "r");
- 	if (fp != NULL) {
-@@ -176,8 +184,9 @@
- 	printf("anything special:\n");
- 	printf("\t-h,--help:  print this message\n");
- 	printf("\t-v,--version:  print version info\n");
--	printf("All options are set in ~/.wmmp3.  See sample.wmmp3 in the\n");
--	printf("distribution or http://dotfiles.com/software/ for more info.\n");
-+	printf("All options are set in ~/etc/wmmp3 or ~/.wmmp3.\n");
-+	printf("See sample.wmmp3 in the distribution\n");
-+	printf("or http://dotfiles.com/software/ for more info.\n");
- }
- 
- void show_version()
---- wmmp3-0.11/README.pius	Thu Dec  9 05:26:09 1999
-+++ wmmp3-0.11/README	Fri Dec 10 18:16:56 1999
+--- wmmp3-0.11.pius/README	Thu Dec  9 05:26:09 1999
++++ wmmp3-0.11/README	Sat Dec 11 01:07:28 1999
 @@ -3,8 +3,8 @@
  wmmp3 is an mpg123 frontend.  It is a small X application that will also 
  work as a windowmaker dock app.
@@ -45,3 +11,39 @@
  example/template.
  
  Basically, enter in the config file any directories that contain mp3 files 
+--- wmmp3-0.11.pius/main.c	Thu Dec  9 05:17:34 1999
++++ wmmp3-0.11/main.c	Sat Dec 11 01:09:13 1999
+@@ -121,11 +121,18 @@
+ 	pw = getpwuid(getuid());
+ 	/* don't forget about the string terminator... */
+ 	config_filename = (char *) malloc(sizeof(char) *
+-					   (strlen(pw->pw_dir) + 8));
+-	sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
+-
++					   (strlen(pw->pw_dir) + 11));
+ 
++	sprintf(config_filename, "%s/etc/wmmp3", pw->pw_dir);
+ 	fp = fopen(config_filename, "r");
++	if (fp == NULL) {
++	    fprintf(stderr, "open of %s failed: %s\n",
++                        config_filename, strerror(errno));
++	    sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
++           fprintf(stderr, "trying %s ...\n", config_filename);
++	    fp = fopen(config_filename, "r");
++	}
++
+ 	if (fp != NULL) {
+ 		char line[256];
+ 		char variable[256];
+@@ -176,8 +183,9 @@
+ 	printf("anything special:\n");
+ 	printf("\t-h,--help:  print this message\n");
+ 	printf("\t-v,--version:  print version info\n");
+-	printf("All options are set in ~/.wmmp3.  See sample.wmmp3 in the\n");
+-	printf("distribution or http://dotfiles.com/software/ for more info.\n");
++	printf("All options are set in ~/etc/wmmp3 or ~/.wmmp3.\n");
++	printf("See sample.wmmp3 in the distribution\n");
++	printf("or http://dotfiles.com/software/ for more info.\n");
+ }
+ 
+ void show_version()
