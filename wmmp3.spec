@@ -55,14 +55,12 @@ install -d $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 
 #install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 
-gzip -9nf README TODO ChangeLog AUTHORS
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz sample.wmmp3
+%doc README TODO ChangeLog AUTHORS sample.wmmp3
 %attr(755,root,root) %{_bindir}/wmmp3
 
 #%{_applnkdir}/DockApplets/wmmp3.desktop
