@@ -6,6 +6,7 @@ Release:	4
 License:	GPL
 Group:		X11/Window Managers/Tools
 Source0:	http://dotfiles.com/software/wmmp3/%{name}-%{version}.tar.gz
+# Source0-md5:	9224461d1e35fa1b846119def0bd53a6
 Source1:	%{name}.desktop
 Patch0:		%{name}-home_etc.patch
 Patch1:		%{name}-mpg123_path.patch
