@@ -1,49 +1,330 @@
---- wmmp3-0.11.pius/README	Thu Dec  9 05:26:09 1999
-+++ wmmp3-0.11/README	Sat Dec 11 01:07:28 1999
+--- wmmp3-0.11/Makefile.am	Thu Dec  9 05:27:39 1999
++++ wmmp3-0.11.pius/Makefile.am	Fri Feb  4 17:29:46 2000
+@@ -1,4 +1,4 @@
+ bin_PROGRAMS = wmmp3
+-wmmp3_SOURCES = main.c mpg123ctl.c wmgeneral.c buttons.c main.h mpg123ctl.h wmgeneral.h buttons.h charset.xpm wmmp3.xpm song_hash.c song_hash.h
++wmmp3_SOURCES = userdir.c main.c mpg123ctl.c wmgeneral.c buttons.c userdir.h main.h mpg123ctl.h wmgeneral.h buttons.h charset.xpm wmmp3.xpm song_hash.c song_hash.h
+ EXTRA_DIST = sample.wmmp3
+ 
+--- wmmp3-0.11/Makefile.in	Thu Dec  9 05:30:04 1999
++++ wmmp3-0.11.pius/Makefile.in	Fri Feb  4 17:30:17 2000
+@@ -63,7 +63,7 @@
+ VERSION = @VERSION@
+ 
+ bin_PROGRAMS = wmmp3
+-wmmp3_SOURCES = main.c mpg123ctl.c wmgeneral.c buttons.c main.h mpg123ctl.h wmgeneral.h buttons.h charset.xpm wmmp3.xpm song_hash.c song_hash.h
++wmmp3_SOURCES = userdir.c main.c mpg123ctl.c wmgeneral.c buttons.c userdir.h main.h mpg123ctl.h wmgeneral.h buttons.h charset.xpm wmmp3.xpm song_hash.c song_hash.h
+ EXTRA_DIST = sample.wmmp3
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+@@ -79,7 +79,7 @@
+ X_LIBS = @X_LIBS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+ X_PRE_LIBS = @X_PRE_LIBS@
+-wmmp3_OBJECTS =  main.o mpg123ctl.o wmgeneral.o buttons.o song_hash.o
++wmmp3_OBJECTS =  userdir.o main.o mpg123ctl.o wmgeneral.o buttons.o song_hash.o
+ wmmp3_LDADD = $(LDADD)
+ wmmp3_DEPENDENCIES = 
+ wmmp3_LDFLAGS = 
+--- wmmp3-0.11/README	Thu Dec  9 05:26:09 1999
++++ wmmp3-0.11.pius/README	Fri Feb  4 17:31:06 2000
 @@ -3,8 +3,8 @@
  wmmp3 is an mpg123 frontend.  It is a small X application that will also 
  work as a windowmaker dock app.
  
 -All user options are contained in a config file, ~/.wmmp3 .  There is a 
 -sample.wmmp3 file in the distribution that can be used as an 
-+All user options are contained in a config file, ~/etc/wmmp3 or ~/.wmmp3 .
++All user options are contained in a config file, $CONFIG_DIR/wmmp3 or ~/.wmmp3
 +There is a sample.wmmp3 file in the distribution that can be used as an 
  example/template.
  
  Basically, enter in the config file any directories that contain mp3 files 
---- wmmp3-0.11.pius/main.c	Thu Dec  9 05:17:34 1999
-+++ wmmp3-0.11/main.c	Sat Dec 11 01:09:13 1999
-@@ -121,11 +121,18 @@
- 	pw = getpwuid(getuid());
- 	/* don't forget about the string terminator... */
- 	config_filename = (char *) malloc(sizeof(char) *
+--- wmmp3-0.11/main.c	Fri Feb  4 17:48:56 2000
++++ wmmp3-0.11.pius/main.c	Fri Feb  4 17:47:48 2000
+@@ -12,6 +12,7 @@
+  */
+ 
+ #include "main.h"
++#include "userdir.h"
+ 
+ #define B_STOP 0
+ #define B_PLAY 1
+@@ -107,8 +108,9 @@
+ 
+ void loadconfig()
+ {
+-	struct passwd *pw;
+-	char *config_filename;
++	struct cfv etcfile;
++//	struct passwd *pw;
++//	char *config_filename;
+ 	FILE *fp;
+ 
+ 	errno = 0;
+@@ -118,15 +120,21 @@
+ 	set_mp3ext(".mp3");
+ 	set_playlistext(".m3u");
+ 
+-	pw = getpwuid(getuid());
+-	/* don't forget about the string terminator... */
+-	config_filename = (char *) malloc(sizeof(char) *
 -					   (strlen(pw->pw_dir) + 8));
 -	sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
 -
-+					   (strlen(pw->pw_dir) + 11));
++        etcfile.variable = "CONFIG_DIR";
++        etcfile.home_dir = NULL;
++        etcfile.home_scd = NULL;
++        etcfile.subname = "wmmp3";
++        etcfile.prefix = ".";
++        etcfile.suffix = "";
++        etcfile.mode = M_REGULAR_FILE;
++	
++        if ((usercfv (&etcfile)) == -1) {
++	    fprintf(stderr, "Config file not found in $CONFIG_DIR/wmmp3\n");
++	    fprintf(stderr, "or ~/.wmmp3 . See 'wmmp3 --help' for details.\n");
++	} else {
++	    fp = fopen(etcfile.result, "r");
  
-+	sprintf(config_filename, "%s/etc/wmmp3", pw->pw_dir);
- 	fp = fopen(config_filename, "r");
-+	if (fp == NULL) {
-+	    fprintf(stderr, "open of %s failed: %s\n",
-+                        config_filename, strerror(errno));
-+	    sprintf(config_filename, "%s/.wmmp3", pw->pw_dir);
-+           fprintf(stderr, "trying %s ...\n", config_filename);
-+	    fp = fopen(config_filename, "r");
-+	}
-+
- 	if (fp != NULL) {
+-	fp = fopen(config_filename, "r");
+-	if (fp != NULL) {
++	    if (fp != NULL) {
  		char line[256];
  		char variable[256];
-@@ -176,8 +183,9 @@
+ 		char value[256];
+@@ -160,13 +168,13 @@
+ 
+ 
+ 		fclose(fp);
+-	} else {
+-		fprintf(stderr, "open of %s failed: %s\n",
+-			config_filename,
++	    } else {
++		fprintf(stderr, "Open of %s failed: %s\n",
++			etcfile.result,
+ 			strerror(errno));
++	    }
+ 	}
+ 
+-	free(config_filename);
+ }
+ 
+ void show_help()
+@@ -176,8 +184,9 @@
  	printf("anything special:\n");
  	printf("\t-h,--help:  print this message\n");
  	printf("\t-v,--version:  print version info\n");
 -	printf("All options are set in ~/.wmmp3.  See sample.wmmp3 in the\n");
 -	printf("distribution or http://dotfiles.com/software/ for more info.\n");
-+	printf("All options are set in ~/etc/wmmp3 or ~/.wmmp3.\n");
++	printf("All options are set in $CONFIG_DIR/wmmp3 or ~/.wmmp3.\n");
 +	printf("See sample.wmmp3 in the distribution\n");
 +	printf("or http://dotfiles.com/software/ for more info.\n");
  }
  
  void show_version()
+--- wmmp3-0.11/userdir.c	Thu Jan  1 01:00:00 1970
++++ wmmp3-0.11.pius/userdir.c	Thu Feb  3 01:24:28 2000
+@@ -0,0 +1,146 @@
++// $Id$
++#include "userdir.h"
++    
++static char *nonulhome = "";
++
++/******************************************************************************/
++    
++int getusercfv (char *variable, 
++		    char *home_dir, 
++		    char *user_dir, 
++		    size_t stringsize)
++{
++	struct stat st;
++	char *d;
++	
++	bzero (user_dir, stringsize);
++	if (variable == NULL || *variable == '\0') return (-1);
++	if (home_dir == NULL) home_dir = nonulhome;
++	d = getenv (variable);	
++	if (d == NULL || *d == '\0') return (-1);
++	if (*d == '/') 
++	    {
++	    strncpy (user_dir, d, stringsize-1);
++	    }
++	else
++	    {
++	    snprintf (user_dir, stringsize-1, "%s/%s", home_dir, d);
++	    }
++	    
++	if (stat(user_dir,&st) != -1 && S_ISDIR(st.st_mode)) 
++	    {
++	    return (0);
++	    }
++	
++	return (-1);
++}
++
++/******************************************************************************/
++
++int detectcfv(struct cfv *CFV) {
++	if (CFV->subname == NULL) CFV->subname = nonulhome;
++	if (CFV->home_dir == NULL) CFV->home_dir = getenv ("HOME");
++	if (CFV->home_dir == NULL) CFV->home_dir = CFV->home_scd;
++	if (CFV->home_dir == NULL) return (-1);
++	return 0;
++}
++
++int preparemain(struct cfv *CFV) {
++	char *p;
++	struct stat st;
++	if ((p = strrchr(CFV->result, '/')) && *(p+1) == '\0') 
++	    p = '\0';
++	snprintf ((rindex(CFV->result,'\0')), MAXPATHLEN-1, "/%s", 
++		  CFV->subname);
++	if (stat( CFV->result,&st) != -1 
++	     && CFV->mode ? 
++		S_ISDIR(st.st_mode) : 
++		S_ISREG(st.st_mode)) /* have file or dir */
++	    return (1);
++	return 0;
++}
++
++int preparehome(struct cfv *CFV) {
++	struct stat st;
++    	if (CFV->home_dir == NULL || *(CFV->home_dir) == '\0') return (-1);
++	if (CFV->prefix == NULL && CFV->suffix == NULL) return (-1);
++	snprintf (CFV->result, MAXPATHLEN-1, "%s/%s%s%s", 
++		       CFV->home_dir, 
++		       CFV->prefix? CFV->prefix:"",
++		       CFV->subname,
++		       CFV->suffix? CFV->suffix:"");
++	if (stat(CFV->result,&st) != -1 
++		 && CFV->mode ? 
++		    S_ISDIR(st.st_mode) : 
++		    S_ISREG(st.st_mode)) /* have file or dir */
++		return (2);
++	return (-1);
++}
++
++int usercfv (struct cfv *CFV) {
++	int gr;
++	gr = detectcfv(CFV);
++	if (gr) return gr;
++	/* get environment variable */
++	gr = getusercfv (CFV->variable, 
++			CFV->home_dir, 
++			CFV->result,
++			MAXPATHLEN);
++	if (gr != -1) 	/* have main directory */
++	    {
++		gr = preparemain(CFV);
++		if (gr) return gr;
++	    }
++	/* don't have main directory or a proper variable set */
++	gr = preparehome(CFV);
++	return gr;
++}
++	
++/******************************************************************************/
++
++/* If directory or file doesn't exist returns the best one wich may be created*/
++int notnullusercfv (struct cfv *CFV) {
++	int gr;
++	if ((usercfv(CFV)) == -1) {
++	    gr = detectcfv(CFV);
++	    if (gr) return gr;
++	    /* get environment variable */
++	    gr = getusercfv (CFV->variable, 
++			    CFV->home_dir, 
++			    CFV->result,
++			    MAXPATHLEN);
++	    if (gr != -1) 	/* have main directory */
++		{
++		    gr = preparemain(CFV);
++		    return 0;
++		}
++	    /* don't have main directory or a proper variable set */
++	    gr = preparehome(CFV);
++	    return 0;
++ 	}
++	return 0;	
++}
++    
++/******************************************************************************/
++
++FILE *fopencfv (struct cfv *CFV, const char *mode)
++    {
++    FILE *cfvfile = NULL;
++    
++    CFV->mode = M_REGULAR_FILE;
++    if ((usercfv (CFV)) == -1) return (NULL);	
++    cfvfile = fopen (CFV->result, mode);
++    return (cfvfile);
++    }
++/******************************************************************************/
++
++FILE *notnullfopencfv (struct cfv *CFV, const char *mode)
++    {
++    FILE *cfvfile = NULL;
++    
++    CFV->mode = M_REGULAR_FILE;
++    if ((notnullusercfv (CFV)) == -1) return (NULL);	
++    cfvfile = fopen (CFV->result, mode);
++    return (cfvfile);
++    }
++    
+--- wmmp3-0.11/userdir.h	Thu Jan  1 01:00:00 1970
++++ wmmp3-0.11.pius/userdir.h	Thu Feb  3 01:58:57 2000
+@@ -0,0 +1,55 @@
++// $Id$
++#ifndef USERDIR__H
++#define USERDIR__H
++
++#include <unistd.h>
++#include <string.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/param.h>
++
++#define	M_REGULAR_FILE	0
++#define	M_DIRECTORY	1
++
++struct cfv {
++	char result[MAXPATHLEN];	/* our result			*/
++	char *variable;	/* name of an environment variable		*/
++	char *home_dir;	/* home directory or NULL for autodetect	*/
++	char *home_scd; /* directory if home_dir==NULL and no result	*/
++	char *subname;	/* core name of a file/directory		*/
++    	char *prefix;	/* prefix when using directly home_dir		*/
++	char *suffix;	/* suffix when using directly home_dir		*/
++	int mode;	/* expected: M_REGULAR_FILE or M_DIRECTORY	*/
++	};
++
++/* reads environment variable. if the path isn't absolute will add $HOME/
++ * at the beginning
++ * return: 0 - directory exists
++ *         -1 - directory doesn't exist
++ */
++int getusercfv (char *variable, 
++		    char *home_dir, 
++		    char *user_dir,
++		    size_t stringsize);
++/* reads the $HOME variable */
++int detectcfv(struct cfv *CFV);
++
++/* looks for the config/data file/dir.
++ * result: -1 - error - cannot find file/dir 
++ *         0 - ok
++ *         CFV.result set
++ */
++int usercfv (struct cfv *CFV);
++/* looks for the config/data file/dir.
++ * result: -1 - error - cannot read $HOME
++ *          0 - ok - if the CFV.result exists, read it. If not create it.
++ *              CFV.result set
++ */              
++int notnullusercfv (struct cfv *CFV);
++
++FILE *fopencfv (struct cfv *CFV, const char *mode);
++FILE *notnullfopencfv (struct cfv *CFV, const char *mode);
++
++#endif
