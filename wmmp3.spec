@@ -16,7 +16,6 @@ BuildRequires:	automake
 Requires:	mpg123
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_prefix 	/usr/X11R6
 
 %description
 wmmp3 is a frontend for the mpg123 mp3 player. It is an X11
