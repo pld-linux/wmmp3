@@ -2,7 +2,7 @@ Summary:	wmmp3 - mpg123 frontend for the WindowMaker Dock
 Summary(pl):	wmmp3 - nak³adka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
 Version:	0.11
-Release:	2
+Release:	3
 Group:		X11/Window Managers/Tools
 Group(pl):	X11/Zarz±dcy Okien/Narzêdzia
 License:	GPL
@@ -36,6 +36,10 @@ konfiguracyjnego.
 %patch1 -p1
 
 %build
+rm -f missing
+aclocal
+autoconf
+automake -a -c
 %configure
 
 %{__make}
