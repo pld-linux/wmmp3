@@ -12,7 +12,6 @@ Patch0:		wmmp3-home_etc.patch
 Patch1:		wmmp3-mpg123_path.patch
 URL:		http://dotfiles.com/software/wmmp3/
 BuildRequires:	XFree86-devel
-BuildRequires:	xpm-devel
 Requires:	mpg123
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
