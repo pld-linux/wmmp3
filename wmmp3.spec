@@ -1,13 +1,15 @@
 Summary:	wmmp3 - mpg123 frontend for the WindowMaker Dock
 Summary(pl):	wmmp3 - nak³adka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
-Version:	0.09
+Version:	0.11
 Release:	1
 Group:		X11/Window Managers/Tools
 Group(pl):	X11/Zarz±dcy Okien/Narzêdzia
 Copyright:	GPL
 Source0:	http://dotfiles.com/software/wmmp3/%{name}-%{version}.tar.gz
 Source1:	wmmp3.desktop
+Patch0:		wmmp3-home_etc.patch
+Patch1:		wmmp3-mpg123_path.patch
 URL:		http://dotfiles.com/software/wmmp3/
 BuildRequires:	XFree86-devel
 BuildRequires:	xpm-devel
@@ -25,12 +27,14 @@ that can be used as an example/template.
 
 %description -l pl
 wmmp3 jest nak³adk± dla odtwarzacza mp3 - mpg123, zaprojektowan± do pracy
-w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte w pliku ~/.wmmp3.
-W pakiecie znajduje siê plik sample.wmmp3, mog±cy pos³u¿yæ za przyk³ad lub
-szablon do stworzenia w³asnego pliku konfiguracyjnego.
+w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte w pliku
+~/etc/wmmp3. W pakiecie znajduje siê plik sample.wmmp3, mog±cy pos³u¿yæ
+za przyk³ad lub szablon do stworzenia w³asnego pliku konfiguracyjnego.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 LDFLAGS="-s"; export LDFLAGS
@@ -45,14 +49,14 @@ install -d $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 make install DESTDIR=$RPM_BUILD_ROOT
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/DockApplets
 
-gzip -9nf README NEWS TODO ChangeLog AUTHORS
+gzip -9nf README TODO ChangeLog AUTHORS
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc {README,NEWS,TODO,ChangeLog,AUTHORS}.gz sample.wmmp3
+%doc {README,TODO,ChangeLog,AUTHORS}.gz sample.wmmp3
 %attr(755,root,root) %{_bindir}/wmmp3
 
 %{_applnkdir}/DockApplets/wmmp3.desktop
