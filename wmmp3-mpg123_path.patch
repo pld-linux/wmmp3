@@ -1,16 +1,16 @@
---- wmmp3-0.11/main.c.pius	Fri Dec 10 18:10:13 1999
-+++ wmmp3-0.11/main.c	Fri Dec 10 18:15:20 1999
-@@ -114,7 +114,7 @@
- 	errno = 0;
+--- wmmp3-0.12/main.c.orig	2004-08-08 17:45:12.000000000 +0200
++++ wmmp3-0.12/main.c	2004-08-08 17:46:11.000000000 +0200
+@@ -125,7 +125,7 @@
+     errno = 0;
  
- 	/* set defualts in case anything fails */
--	set_mpg123("/usr/local/bin/mpg123");
-+	set_mpg123("/usr/bin/mpg123");
- 	set_mp3ext(".mp3");
- 	set_playlistext(".m3u");
+     /* set defualts in case anything fails */
+-    set_mpg123("/usr/local/bin/mpg123");
++    set_mpg123("/usr/bin/mpg123");
+     set_mp3ext(".mp3");
+     set_playlistext(".m3u");
  
---- wmmp3-0.11/sample.wmmp3.pius	Thu Dec  9 05:25:25 1999
-+++ wmmp3-0.11/sample.wmmp3	Fri Dec 10 18:30:45 1999
+--- wmmp3-0.12/sample.wmmp3.orig	2004-08-08 17:44:55.000000000 +0200
++++ wmmp3-0.12/sample.wmmp3	2004-08-08 17:45:26.000000000 +0200
 @@ -1,5 +1,5 @@
  # full path to mpg123 executable
 -mpg123 = /usr/local/bin/mpg123
