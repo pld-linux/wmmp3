@@ -1,5 +1,5 @@
 Summary:	wmmp3 - mpg123 frontend for the WindowMaker Dock
-Summary(pl):	wmmp3 - nak³adka na mpg123 dla Doku WindowMakera
+Summary(pl.UTF-8):   wmmp3 - nakÅ‚adka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
 Version:	0.12
 Release:	1
@@ -25,11 +25,11 @@ are contained in a config file, $CONFIG_DIR/wmmp3 . There is a
 sample.wmmp3 file in the package that can be used as an
 example/template.
 
-%description -l pl
-wmmp3 jest nak³adk± dla odtwarzacza MP3 - mpg123, zaprojektowan± do
-pracy w Doku WindowMakera. Wszystkie opcje u¿ytkownika s± zawarte w
-pliku $CONFIG_DIR/wmmp3. W pakiecie znajduje siê plik sample.wmmp3,
-mog±cy pos³u¿yæ za przyk³ad lub szablon do stworzenia w³asnego pliku
+%description -l pl.UTF-8
+wmmp3 jest nakÅ‚adkÄ… dla odtwarzacza MP3 - mpg123, zaprojektowanÄ… do
+pracy w Doku WindowMakera. Wszystkie opcje uÅ¼ytkownika sÄ… zawarte w
+pliku $CONFIG_DIR/wmmp3. W pakiecie znajduje siÄ™ plik sample.wmmp3,
+mogÄ…cy posÅ‚uÅ¼yÄ‡ za przykÅ‚ad lub szablon do stworzenia wÅ‚asnego pliku
 konfiguracyjnego.
 
 %prep
