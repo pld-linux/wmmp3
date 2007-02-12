@@ -1,5 +1,5 @@
 Summary:	wmmp3 - mpg123 frontend for the WindowMaker Dock
-Summary(pl.UTF-8):   wmmp3 - nakładka na mpg123 dla Doku WindowMakera
+Summary(pl.UTF-8):	wmmp3 - nakładka na mpg123 dla Doku WindowMakera
 Name:		wmmp3
 Version:	0.12
 Release:	1
